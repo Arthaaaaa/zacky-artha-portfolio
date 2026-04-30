@@ -621,6 +621,15 @@
       box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6);
     }
 
+    .lightbox-youtube {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 0.75rem;
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6);
+      border: none;
+      display: block;
+    }
+
     .lightbox-close {
       position: fixed;
       top: 1.5rem;
@@ -1620,7 +1629,7 @@
       video: [
         { src: 'https://www.youtube.com/embed/5goX-k63AW4', title: 'Podcast Production', sub: 'Video Editing · Podcast', type: 'youtube' },
         { src: 'src/img/Podcast/Konten.mp4', title: 'Short Form Content', sub: 'Video Editing · Konten', type: 'video', instagramLink: 'https://www.instagram.com/reel/C7qhI_nJkDq/?igsh=YjUxdXQ2d2wzYzlj' },
-        { src: 'src/img/Podcast/Logo 3.mp4', title: 'Logo Animation', sub: 'Video Editing · Motion Graphic', type: 'video' },
+        { src: 'src/img/Podcast/logo 3.mp4', title: 'Logo Animation', sub: 'Video Editing · Motion Graphic', type: 'video' },
         { src: 'src/img/Podcast/Reels.mp4', title: 'Instagram Reels Edit', sub: 'Video Editing · Reels', type: 'video', instagramLink: 'https://www.instagram.com/reel/C5e13lLy5o7/?igsh=cWFlZzl4YzdxYTFu' },
         { src: 'src/img/Podcast/Motion.mp4', title: 'Content ', sub: 'Video Editing', type: 'video', instagramLink: 'https://www.instagram.com/reel/C9_fo-TSeX2/?igsh=MXJlYWtkajZ1eGFnNg==' },
         { src: 'src/img/Podcast/captain.mov', title: 'Captain', sub: 'Video Editing', type: 'video' },
@@ -1688,7 +1697,7 @@
         iframe.src = item.src + '?autoplay=1&rel=0';
         iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
         iframe.allowFullscreen = true;
-        iframe.style.cssText = 'width:100%;height:100%;border:none;border-radius:12px;display:block;';
+        iframe.className = 'lightbox-youtube';
         document.querySelector('.lightbox-inner').prepend(iframe);
       } else if (item.type === 'video') {
         img.style.display = 'none';
