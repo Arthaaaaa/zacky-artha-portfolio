@@ -1595,6 +1595,30 @@
 
       #hero {
         padding: 0 1.5rem 4rem;
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding-top: 6rem;
+        gap: 2rem;
+      }
+
+      .hero-left {
+        padding-bottom: 0;
+        padding-top: 0;
+        text-align: center;
+        align-items: center;
+      }
+
+      .hero-actions {
+        justify-content: center;
+      }
+
+      .hero-right {
+        padding: 0 0 3rem;
+        align-items: center;
+      }
+
+      .skill-panel {
+        max-width: 100%;
       }
 
       #about,
@@ -1651,6 +1675,10 @@
 
       .about-stats {
         grid-template-columns: 1fr;
+      }
+
+      .hero-right {
+        display: none;
       }
     }
 
