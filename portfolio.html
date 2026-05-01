@@ -2674,6 +2674,9 @@
       }
     });
 
+    // no-op kept for compatibility with addHover() calls below
+    function addHover(els) {}
+
     // SCROLL REVEAL
     const reveals = document.querySelectorAll('.reveal');
     const obs = new IntersectionObserver(entries => {
