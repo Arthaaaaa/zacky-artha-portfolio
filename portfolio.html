@@ -55,10 +55,10 @@
       overflow-x: hidden;
     }
 
-    /* CURSOR */
+    /* CURSOR — desktop only, hidden on touch devices */
     #cursor {
-      width: 8px;
-      height: 8px;
+      width: 12px;
+      height: 12px;
       background: var(--accent-light);
       border-radius: 50%;
       position: fixed;
@@ -66,51 +66,37 @@
       left: 0;
       pointer-events: none;
       z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: transform 0.06s, width 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), height 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s;
-      box-shadow: 0 0 12px var(--accent-glow);
+      transform: translate(-50%, -50%) scale(1);
+      transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  width 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  height 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  background 0.2s, opacity 0.2s;
+      box-shadow: 0 0 10px var(--accent-glow), 0 0 24px rgba(124, 106, 247, 0.2);
+      opacity: 0;
     }
 
+    #cursor.visible { opacity: 1; }
+
     #cursor.hover {
-      width: 44px;
-      height: 44px;
-      background: transparent;
-      box-shadow: none;
+      width: 36px;
+      height: 36px;
+      background: rgba(124, 106, 247, 0.18);
+      box-shadow: 0 0 0 1.5px var(--accent), 0 0 20px var(--accent-glow);
     }
 
     #cursor.click {
-      width: 5px;
-      height: 5px;
+      width: 7px;
+      height: 7px;
       background: var(--accent2);
-      box-shadow: 0 0 16px var(--accent2-glow);
+      box-shadow: 0 0 18px var(--accent2-glow);
     }
 
-    #cursor-ring {
-      width: 34px;
-      height: 34px;
-      border: 2.5px solid rgba(124, 106, 247, 0.5);
-      border-radius: 50%;
-      position: fixed;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      z-index: 9998;
-      transform: translate(-50%, -50%);
-      transition: transform 0.22s ease, width 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), height 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s, border-color 0.3s;
-    }
+    #cursor-ring { display: none; }
 
-    #cursor-ring.hover {
-      width: 64px;
-      height: 64px;
-      border-color: rgba(125, 106, 247, 0.747);
-      opacity: 0.8;
-    }
-
-    #cursor-ring.click {
-      width: 20px;
-      height: 20px;
-      border-color: var(--accent2);
-      opacity: 0.9;
+    /* Hide custom cursor completely on touch/mobile */
+    @media (pointer: coarse) {
+      body { cursor: auto !important; }
+      #cursor { display: none !important; }
     }
 
     /* NOISE OVERLAY */
@@ -2693,29 +2679,30 @@
     }
     applyRippleToButtons();
 
-    // ─── CURSOR ────────────────────────────────────────────────
+    // ─── CURSOR (desktop only) ─────────────────────────────────
     const cursor = document.getElementById('cursor');
-    const ring = document.getElementById('cursor-ring');
-    let mx = 0, my = 0, rx = 0, ry = 0;
-    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-    function animateCursor() {
-      rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1;
-      cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
-      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-      requestAnimationFrame(animateCursor);
-    }
-    animateCursor();
+    const isTouch = window.matchMedia('(pointer: coarse)').matches;
 
-    document.addEventListener('mousedown', () => { cursor.classList.add('click'); ring.classList.add('click'); });
-    document.addEventListener('mouseup', () => { cursor.classList.remove('click'); ring.classList.remove('click'); });
-
-    function addHover(els) {
-      els.forEach(el => {
-        el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
-        el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
+    if (!isTouch && cursor) {
+      let mx = 0, my = 0;
+      document.addEventListener('mousemove', e => {
+        mx = e.clientX; my = e.clientY;
+        cursor.style.left = mx + 'px';
+        cursor.style.top  = my + 'px';
+        cursor.classList.add('visible');
       });
+      document.addEventListener('mouseleave', () => cursor.classList.remove('visible'));
+      document.addEventListener('mousedown', () => cursor.classList.add('click'));
+      document.addEventListener('mouseup',   () => cursor.classList.remove('click'));
+
+      function addHover(els) {
+        els.forEach(el => {
+          el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+          el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+      }
+      addHover(document.querySelectorAll('a, button, .work-item, .service-card'));
     }
-    addHover(document.querySelectorAll('a, button, .work-item, .service-card'));
 
     // SCROLL REVEAL
     const reveals = document.querySelectorAll('.reveal');
