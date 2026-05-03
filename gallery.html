@@ -829,10 +829,354 @@
         grid-template-columns: 1fr;
       }
     }
+
+    /* ================================================
+       LOADING SCREEN
+    ================================================ */
+    #loading-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #06060a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      overflow: hidden;
+      transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #loading-screen.hide {
+      opacity: 0;
+      transform: scale(1.04);
+      pointer-events: none;
+    }
+
+    .ls-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -60%);
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center,
+        rgba(124, 106, 247, 0.18) 0%,
+        rgba(56, 232, 216, 0.08) 45%,
+        transparent 70%);
+      pointer-events: none;
+      animation: ls-glow-pulse 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes ls-glow-pulse {
+      from { opacity: 0.7; transform: translate(-50%, -60%) scale(1); }
+      to   { opacity: 1;   transform: translate(-50%, -60%) scale(1.15); }
+    }
+
+    .ls-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid transparent;
+      pointer-events: none;
+    }
+
+    .ls-ring-1 {
+      width: 260px; height: 260px;
+      border-top-color: rgba(124, 106, 247, 0.5);
+      border-right-color: rgba(124, 106, 247, 0.15);
+      animation: ls-spin 2.2s linear infinite;
+    }
+
+    .ls-ring-2 {
+      width: 210px; height: 210px;
+      border-bottom-color: rgba(56, 232, 216, 0.5);
+      border-left-color: rgba(56, 232, 216, 0.15);
+      animation: ls-spin 1.7s linear infinite reverse;
+    }
+
+    .ls-ring-3 {
+      width: 165px; height: 165px;
+      border-top-color: rgba(168, 156, 255, 0.4);
+      animation: ls-spin 3s linear infinite;
+    }
+
+    @keyframes ls-spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .ls-logo-wrap {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3.5rem;
+      animation: ls-logo-in 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    @keyframes ls-logo-in {
+      from { opacity: 0; transform: scale(0.7) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .ls-logo-icon {
+      width: 72px; height: 72px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #7c6af7 0%, #38e8d8 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 8px rgba(124,106,247,0.1), 0 0 40px rgba(124,106,247,0.4), 0 0 80px rgba(56,232,216,0.15);
+      margin-bottom: 1.2rem;
+      animation: ls-icon-pulse 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes ls-icon-pulse {
+      from { box-shadow: 0 0 0 8px rgba(124,106,247,0.1), 0 0 40px rgba(124,106,247,0.4), 0 0 80px rgba(56,232,216,0.15); }
+      to   { box-shadow: 0 0 0 12px rgba(124,106,247,0.15), 0 0 60px rgba(124,106,247,0.55), 0 0 100px rgba(56,232,216,0.25); }
+    }
+
+    .ls-logo-icon svg { width: 38px; height: 38px; fill: #fff; }
+
+    .ls-logo-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #eeeef4;
+    }
+
+    .ls-logo-text .ls-dot {
+      background: linear-gradient(135deg, #7c6af7, #38e8d8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 1.8rem;
+      line-height: 0;
+      position: relative;
+      top: 0.1em;
+    }
+
+    .ls-tagline {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #6b6b85;
+      margin-top: 0.4rem;
+      animation: ls-fade-in 1s 0.4s both;
+    }
+
+    @keyframes ls-fade-in {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .ls-progress-wrap {
+      width: 280px;
+      animation: ls-fade-in 0.8s 0.5s both;
+    }
+
+    .ls-progress-track {
+      width: 100%;
+      height: 3px;
+      background: rgba(120, 120, 255, 0.1);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 0.9rem;
+    }
+
+    .ls-progress-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #7c6af7 0%, #38e8d8 100%);
+      box-shadow: 0 0 12px rgba(124, 106, 247, 0.8);
+      transition: width 0.08s linear;
+      position: relative;
+    }
+
+    .ls-progress-bar::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 50%;
+      transform: translateY(-50%);
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 10px rgba(124,106,247,1), 0 0 20px rgba(56,232,216,0.6);
+    }
+
+    .ls-progress-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ls-status {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #6b6b85;
+    }
+
+    .ls-pct {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #a89cff;
+      letter-spacing: 0.02em;
+    }
+
+    .ls-particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: ls-float var(--dur, 4s) ease-in-out infinite alternate;
+      opacity: 0;
+      animation-delay: var(--del, 0s);
+    }
+
+    @keyframes ls-float {
+      0%   { opacity: 0; transform: translate(0, 0) scale(0.5); }
+      20%  { opacity: var(--op, 0.6); }
+      80%  { opacity: var(--op, 0.6); }
+      100% { opacity: 0; transform: translate(var(--tx, 30px), var(--ty, -50px)) scale(1.2); }
+    }
+
+    #loading-screen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.02;
+      pointer-events: none;
+      z-index: 1;
+    }
   </style>
 </head>
 
 <body>
+
+  <!-- LOADING SCREEN -->
+  <div id="loading-screen" aria-hidden="true">
+    <div class="ls-glow"></div>
+
+    <!-- Floating particles -->
+    <div class="ls-particle" style="width:6px;height:6px;background:#7c6af7;left:20%;top:30%;--dur:5s;--del:0.2s;--tx:40px;--ty:-70px;--op:0.7;"></div>
+    <div class="ls-particle" style="width:4px;height:4px;background:#38e8d8;left:75%;top:60%;--dur:4.5s;--del:0.8s;--tx:-30px;--ty:-60px;--op:0.6;"></div>
+    <div class="ls-particle" style="width:8px;height:8px;background:#a89cff;left:60%;top:20%;--dur:6s;--del:0.4s;--tx:-50px;--ty:40px;--op:0.5;"></div>
+    <div class="ls-particle" style="width:5px;height:5px;background:#38e8d8;left:35%;top:70%;--dur:3.8s;--del:1s;--tx:60px;--ty:-40px;--op:0.65;"></div>
+    <div class="ls-particle" style="width:3px;height:3px;background:#7c6af7;left:80%;top:35%;--dur:5.5s;--del:0.6s;--tx:-40px;--ty:50px;--op:0.5;"></div>
+    <div class="ls-particle" style="width:7px;height:7px;background:#a89cff;left:15%;top:65%;--dur:4.2s;--del:1.2s;--tx:35px;--ty:-55px;--op:0.55;"></div>
+
+    <!-- Orbit rings -->
+    <div class="ls-ring ls-ring-1"></div>
+    <div class="ls-ring ls-ring-2"></div>
+    <div class="ls-ring ls-ring-3"></div>
+
+    <!-- Logo -->
+    <div class="ls-logo-wrap">
+      <div class="ls-logo-icon">
+        <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <text x="4" y="31" font-family="Inter,sans-serif" font-size="30" font-weight="900" fill="white" letter-spacing="-2">Z</text>
+        </svg>
+      </div>
+      <div class="ls-logo-text">Zacky Artha<span class="ls-dot">.</span></div>
+      <div class="ls-tagline">Designer &middot; Video Editor &middot; AI Artist</div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="ls-progress-wrap">
+      <div class="ls-progress-track">
+        <div class="ls-progress-bar" id="ls-bar"></div>
+      </div>
+      <div class="ls-progress-info">
+        <span class="ls-status" id="ls-status">Memuat galeri...</span>
+        <span class="ls-pct" id="ls-pct">0%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING SCREEN LOGIC -->
+  <script>
+    (function () {
+      var screen   = document.getElementById('loading-screen');
+      var bar      = document.getElementById('ls-bar');
+      var pctEl    = document.getElementById('ls-pct');
+      var statusEl = document.getElementById('ls-status');
+
+      var phases = [
+        { label: 'Memuat aset...', target: 30, delay: 350 },
+        { label: 'Menyiapkan galeri...', target: 65, delay: 500 },
+        { label: 'Menginisialisasi...', target: 88, delay: 400 },
+        { label: 'Hampir selesai...', target: 97, delay: 300 },
+      ];
+
+      var pct = 0;
+      var finished = false;
+
+      function animateTo(target, duration, onDone) {
+        var start = performance.now();
+        var from  = pct;
+        function step(now) {
+          var t = Math.min((now - start) / duration, 1);
+          var ease = 1 - Math.pow(1 - t, 3);
+          pct = Math.round(from + (target - from) * ease);
+          bar.style.width = pct + '%';
+          pctEl.textContent = pct + '%';
+          if (t < 1) {
+            requestAnimationFrame(step);
+          } else {
+            pct = target;
+            bar.style.width = target + '%';
+            pctEl.textContent = target + '%';
+            if (onDone) onDone();
+          }
+        }
+        requestAnimationFrame(step);
+      }
+
+      function runPhase(i) {
+        if (i >= phases.length) return;
+        var phase = phases[i];
+        statusEl.textContent = phase.label;
+        animateTo(phase.target, phase.delay, function () {
+          setTimeout(function () { runPhase(i + 1); }, 80);
+        });
+      }
+
+      function finishLoading() {
+        if (finished) return;
+        finished = true;
+        statusEl.textContent = 'Selamat datang!';
+        animateTo(100, 250, function () {
+          setTimeout(function () {
+            screen.classList.add('hide');
+            setTimeout(function () {
+              screen.style.display = 'none';
+            }, 750);
+          }, 350);
+        });
+      }
+
+      runPhase(0);
+
+      var minDuration = 1800;
+      var startTime   = performance.now();
+
+      window.addEventListener('load', function () {
+        var elapsed = performance.now() - startTime;
+        var remaining = Math.max(0, minDuration - elapsed);
+        setTimeout(finishLoading, remaining);
+      });
+
+      // Fallback: hide after 5s no matter what
+      setTimeout(finishLoading, 5000);
+    })();
+  </script>
+
   <div id="cursor"></div>
   <div id="cursor-ring"></div>
 
